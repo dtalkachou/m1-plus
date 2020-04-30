@@ -14,7 +14,16 @@ const observer = new MutationObserver(records => {
 			// Scripts on page have two mutation with #styles-dyn-css.
 			// First mutation before muttation with .table-body-players, second after
 			observer.disconnect();
-			console.log(user_ids);
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.responseText)
+					// document.getElementById("demo").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open('GET', 'https://monopoly-one.com/api/users.get?user_ids=' + user_ids.join(','), true);
+			xhttp.send();
 		}
 	});
 });
