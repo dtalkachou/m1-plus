@@ -18,8 +18,13 @@ const observer = new MutationObserver(records => {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					console.log(this.responseText)
-					// document.getElementById("demo").innerHTML = this.responseText;
+					let str = '';
+					var responseData = JSON.parse(this.responseText).data;
+					responseData.forEach(function(el) {
+						let winRate = el.games_wins / el.games * 100 || 0;
+						str += el.nick.concat(" - ", el.hasOwnProperty('rank') ? el.rank.title : 'Без звания', ' - ( ', el.games_wins, ' / ', el.games, ' = ', Math.round(winRate), '% )\n');
+					})
+					alert(str);
 				}
 			};
 			xhttp.open('GET', 'https://monopoly-one.com/api/users.get?user_ids=' + user_ids.join(','), true);
