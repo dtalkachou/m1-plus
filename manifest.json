@@ -21,6 +21,9 @@
 			],
 			"js": [
 				"contentScript.js"
+			],
+			"css": [
+				"css/m1-plus-styles.css"
 			]
 		}
 	],
