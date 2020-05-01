@@ -17,3 +17,15 @@ body:not([mnpl-newcolors]) .table-body-players-card-body-avatar>div {
 body[mnpl-newcolors] .table-body-players-card-body-avatar>div>div {
 	border: 2px solid #161a1b;
 }
+
+.table-body-players-card-body-timer {
+	top: 20px!important;
+	left: 25px!important;
+	width: 35px!important;
+	height: 35px!important;
+}
+
+.table-body-players-card-body-timer div {
+	width: 35px!important;
+	height: 35px!important;
+}
