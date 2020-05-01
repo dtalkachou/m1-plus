@@ -7,12 +7,13 @@
 .table-body-players-card-body-avatar>div {
 	width: 35px;
 	height: 35px;
+	padding: 2px;
 }
 
 body:not([mnpl-newcolors]) .table-body-players-card-body-avatar>div {
-	border: 2px solid transparent
+	border: 2px solid transparent;
 }
 
 body[mnpl-newcolors] .table-body-players-card-body-avatar>div>div {
-	border: 2px solid #161a1b
+	border: 2px solid #161a1b;
 }
