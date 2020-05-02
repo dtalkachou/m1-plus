@@ -1,5 +1,7 @@
 const user_ids = [];
 
+console.log('worked')
+
 const observer = new MutationObserver(records => {
 	let re = /^player_card_(\d+)$/;
 	records.forEach(function(arg) {
@@ -52,8 +54,6 @@ const observer = new MutationObserver(records => {
 						}
 						let winRate = el.games_wins / el.games * 100 || 0;
 						playerCard.querySelector('.table-body-players-card-body-stats-games').innerHTML = `${el.games_wins} / ${el.games}<span>(${Math.round(winRate)}%)</span>`
-						
-
 					})
 				}
 			}
