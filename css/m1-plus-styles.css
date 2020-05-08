@@ -1,3 +1,33 @@
+/*General styles*/
+.content-ph {
+    width: 100%;
+    height: 100%;
+    border-radius: 2.5px;
+}
+
+body[theme=dark] .content-ph {
+    background-color: #3d3e46;
+}
+
+body:not([theme]) .content-ph {
+    background-color: #e6e6e6;
+}
+
+/*.content-ph {
+    animation: phAnimation 10.6s linear infinite;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, .35) 50%, rgba(255, 255, 255, 0) 65%) 50% 50%
+}
+
+@keyframes phAnimation {
+    0% {
+        background-position: -200 0
+    }
+    to {
+        background-position: 300 0
+    }
+}*/
+
+/*Table styles*/
 .table-body-players-card-body-info {
     display: flex;
     justify-content: center;
@@ -56,10 +86,16 @@ body:not([theme]) .thing .thing-contnent {
 .thing .thing-contnent {
     border: 1px solid;
     border-bottom: none;
+    padding: 14px 18px 5px;
+}
+
+.thing.thing__souvenir .thing-contnent {
+    padding: 14px 17px 5px;
 }
 
 .thing .thing-price {
+    margin-top: 5px;
+    height: 15px;
     font-size: 11px;
     text-align: center;
-    padding-bottom: 5px;
 }
