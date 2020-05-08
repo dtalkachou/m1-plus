@@ -16,11 +16,11 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://monopoly-one.com/table/",
-				"https://monopoly-one.com/m1tv/"
+				"https://monopoly-one.com/inventory",
+				"https://monopoly-one.com/profile/*/inventory"
 			],
 			"js": [
-				"contentScript.js"
+				"inventoryContentScripts.js"
 			],
 			"css": [
 				"css/m1-plus-styles.css"

@@ -33,3 +33,33 @@
 	padding-left: 3px;
 	opacity: .7;
 }
+
+/*Inventory styles*/
+body[theme=dark] .thing .thing-contnent {
+    border-color: #3d3e46;
+}
+
+body:not([theme]) .thing .thing-contnent {
+    border-color: #e6e6e6;
+}
+
+.inventory-items-one .thing-contnent {
+	border-radius: 5px 5px 0 0;
+}
+
+.thing.thing__souvenir .thing-contnent {
+	/*todo: check original selector .thing.thing__souvenir .thing-image:not(._hack)*/
+	border-width: 2px;
+    border-color: #fad58c;
+}
+
+.thing .thing-contnent {
+    border: 1px solid;
+    border-bottom: none;
+}
+
+.thing .thing-price {
+	font-size: 11px;
+	text-align: center;
+	padding-bottom: 5px;
+}
