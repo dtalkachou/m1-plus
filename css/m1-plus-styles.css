@@ -1,22 +1,22 @@
 .table-body-players-card-body-info {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
 }
 
 .table-body-players-card-body-stats {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-end;
-	flex: 0 1 85px;
-	margin-top: 3px;
-	height: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    flex: 0 1 85px;
+    margin-top: 3px;
+    height: 35px;
 }
 
 .table-body-players-card-body-stats-rank {
-	width: 45px;
+    width: 45px;
     height: 18px;
     background-position: left;
     background-size: contain;
@@ -25,13 +25,13 @@
 }
 
 .table-body-players-card-body-stats-games {
-	margin-top: 2px;
-	font-size: 10px;
+    margin-top: 2px;
+    font-size: 10px;
 }
 
 .table-body-players-card-body-stats-games span {
-	padding-left: 3px;
-	opacity: .7;
+    padding-left: 3px;
+    opacity: .7;
 }
 
 /*Inventory styles*/
@@ -44,12 +44,12 @@ body:not([theme]) .thing .thing-contnent {
 }
 
 .inventory-items-one .thing-contnent {
-	border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
 }
 
-.thing.thing__souvenir .thing-contnent {
-	/*todo: check original selector .thing.thing__souvenir .thing-image:not(._hack)*/
-	border-width: 2px;
+/*:not(_hack) resolver conflicts with specificity*/
+.thing.thing__souvenir .thing-contnent:not(._hack) {
+    border-width: 2px;
     border-color: #fad58c;
 }
 
@@ -59,7 +59,7 @@ body:not([theme]) .thing .thing-contnent {
 }
 
 .thing .thing-price {
-	font-size: 11px;
-	text-align: center;
-	padding-bottom: 5px;
+    font-size: 11px;
+    text-align: center;
+    padding-bottom: 5px;
 }
