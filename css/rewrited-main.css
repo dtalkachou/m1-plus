@@ -1,5 +1,5 @@
 .thing {
-	height: 170px;
+    height: 160px;
 }
 
 .thing .thing-image {
@@ -12,5 +12,5 @@
 .thing.thing__souvenir .thing-image {
     width: 146px;
     height: 107px;
-    padding: 12px 17px 14px;
+    padding: 13px 17px 14px;
 }
