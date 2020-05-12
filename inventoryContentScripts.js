@@ -32,6 +32,8 @@ const observer = new MutationObserver(records => {
 							then(things => {
 								let thingData = things.find(thing => thing.thing_id == node.getAttribute('mnpl-inventory-thingid'))
 								priceDiv.innerHTML = `<div>${thingData.price ? thingData.price : notForSaleText}</div>`
+								if (typeof(thingData.price) === 'number')
+									priceDiv.firstChild.innerHTML += ' р.'
 								if (thingData.price === notForSaleText)
 									priceDiv.firstChild.className = 'thing-price-not-for-sale'
 								else if (thingData.price === noPriceText)
