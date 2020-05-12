@@ -28,20 +28,24 @@ const observer = new MutationObserver(records => {
 						thingContentDiv.appendChild(priceDiv)
 						node.insertBefore(thingContentDiv, node.firstChild)
 
-						inventoryThings.
-							then(things => {
-								let thingData = things.find(thing => thing.thing_id == node.getAttribute('mnpl-inventory-thingid'))
-								priceDiv.innerHTML = `<div>${thingData.price ? thingData.price : notForSaleText}</div>`
-								if (typeof(thingData.price) === 'number')
-									priceDiv.firstChild.innerHTML += ' р.'
-								if (thingData.price === notForSaleText)
-									priceDiv.firstChild.className = 'thing-price-not-for-sale'
-								else if (thingData.price === noPriceText)
-									priceDiv.firstChild.className = 'thing-price-no-price'
+						if (+node.getAttribute('mnpl-inventory-thingid') > 0) {
+							inventoryThings.
+								then(things => {
+									let thingData = things.find(thing => thing.thing_id == node.getAttribute('mnpl-inventory-thingid'))
+									priceDiv.innerHTML = `<div>${thingData.price ? thingData.price : notForSaleText}</div>`
+									if (typeof(thingData.price) === 'number')
+										priceDiv.firstChild.innerHTML += ' р.'
+									if (thingData.price === notForSaleText)
+										priceDiv.firstChild.className = 'thing-price-not-for-sale'
+									else if (thingData.price === noPriceText)
+										priceDiv.firstChild.className = 'thing-price-no-price'
 
-								if (thingData.can_sell > 0)
-									priceDiv.firstChild.className += 'thing-price-banned'
-							})
+									if (thingData.can_sell > 0)
+										priceDiv.firstChild.className += 'thing-price-banned'
+								})
+						}
+						else
+							priceDiv.innerHTML = `<div class='thing-price-not-for-sale'>${notForSaleText}</div>`
 					}
 			})
 		}
