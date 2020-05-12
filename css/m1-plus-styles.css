@@ -99,3 +99,11 @@ body:not([theme]) .thing .thing-contnent {
     font-size: 11px;
     text-align: center;
 }
+
+.thing .thing-price .thing-price-no-price {
+    color: #f5b22b;
+}
+
+.thing .thing-price .thing-price-not-for-sale {
+    color: #da4553;
+}

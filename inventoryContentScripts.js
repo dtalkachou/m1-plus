@@ -3,8 +3,9 @@ const observerConfig = {
 	subtree: true
 }
 
-const thingPrices = {}
-const thingId = {}
+const notForSaleText = 'не для продажи'
+const noPriceText = 'нет цены'
+const inventoryThings = getInventoryThings()
 
 const observer = new MutationObserver(records => {
 	records.forEach(async rec => {
@@ -17,83 +18,67 @@ const observer = new MutationObserver(records => {
 					}
 					else if (node.classList.contains('inventory-items-one')) {
 						let priceDiv = document.createElement('div')
-						priceDiv.className = "thing-price"
+						priceDiv.className = 'thing-price'
 
 						priceDiv.innerHTML = '<div class="content-ph"></div>'
 
 						let thingContentDiv = document.createElement('div')
-						thingContentDiv.className = "thing-contnent"
+						thingContentDiv.className = 'thing-contnent'
 						thingContentDiv.appendChild(node.firstChild)
 						thingContentDiv.appendChild(priceDiv)
 						node.insertBefore(thingContentDiv, node.firstChild)
+
+						inventoryThings.
+							then(things => {
+								let thingData = things.find(thing => thing.thing_id == node.getAttribute('mnpl-inventory-thingid'))
+								priceDiv.innerHTML = `<div>${thingData.price ? thingData.price : notForSaleText}</div>`
+								if (thingData.price === notForSaleText)
+									priceDiv.firstChild.className = 'thing-price-not-for-sale'
+								else if (thingData.price === noPriceText)
+									priceDiv.firstChild.className = 'thing-price-no-price'
+
+								if (thingData.can_sell > 0)
+									priceDiv.firstChild.className += 'thing-price-banned'
+							})
 					}
 			})
-			
-			// const re = /\/profile\/([\w\.]+)\/inventory/
-			// let user_id = re.test(window.location.pathname) && window.location.pathname.match(re)[1]
-
-			// let formData = new FormData()
-			// let endpoint = 'inventory.get'
-			// if (user_id)
-			// 	formData.append('user_id', user_id)
-			// else
-			// 	formData.append('access_token', window.localStorage.getItem('access_token'))
-
-			// let inventoryResponse = await API('inventory.get', {
-			// 	body: formData
-			// })
-
-			// let thingPrototypeIds = new Set()
-			// inventoryResponse.things.forEach(thing => {
-			// 	thingPrototypeIds.add(thing.thing_prototype_id)
-			// })
-
-			// thingPrototypeIds.forEach(async thingPrototypeId => {
-			// 	let formData = new FormData()
-			// 	formData.append('thing_prototype_id', thingPrototypeId)
-			// 	let bestPriceResponse = await API('market.getBestPrice', {
-			// 		body: formData
-			// 	})
-			// 	let bestPrice = bestPriceResponse.price
-			// 	inventoryResponse.things.filter(thing => thing.thing_prototype_id === thingPrototypeId)
-			// 		.forEach(thing => {
-			// 			let thingDiv = document.querySelector(`div[mnpl-inventory-thingid="${thing.thing_id}"]`)
-
-			// 			if (thingDiv) {
-			// 				// thingDiv is null when filter setted
-							// let priceDiv = document.createElement('div')
-							// priceDiv.className = "thing-price"
-							// priceDiv.innerHTML = bestPrice ? `${bestPrice} р.` : 'отсутствует'
-
-							// let thingContentDiv = document.createElement('div')
-							// thingContentDiv.className = "thing-contnent"
-							// thingContentDiv.appendChild(thingDiv.firstChild)
-							// thingContentDiv.appendChild(priceDiv)
-							// thingDiv.insertBefore(thingContentDiv, thingDiv.firstChild)
-			// 			}
-			// 			// todo: write code when filter changed
-			// 		})
-
-			// })
 		}
 	})
 })
 
 rewriteStyles('rewrited-main.css')
+
 observer.observe(document.querySelector('body'), observerConfig)
 
-async function getInventory() {
+async function getInventoryThings() {
 	const re = /\/profile\/([\w\.]+)\/inventory/
 	let user_id = re.test(window.location.pathname) && window.location.pathname.match(re)[1]
+	let formData = new FormData()
 	if (user_id)
 		formData.append('user_id', user_id)
 	else
 		formData.append('access_token', window.localStorage.getItem('access_token'))
-
-	let response = await API('inventory.get', {
+	let inventoryThings = (await API('inventory.get', {
 		body: formData
+	})).things
+
+	let thingPrototypeIds = new Set()
+	inventoryThings.forEach(thing => {
+		thingPrototypeIds.add(thing.thing_prototype_id)
 	})
-	return response
+	thingPrototypeIds.forEach(async thingPrototypeId => {
+		let formData = new FormData()
+		formData.append('thing_prototype_id', thingPrototypeId)
+		let bestThingPrice = (await API('market.getBestPrice', {
+			body: formData
+		})).price || noPriceText
+		inventoryThings.forEach(thing => {
+			if (thingPrototypeId === thing.thing_prototype_id)
+				// can_sell: unixtime or -1 where lock for sale
+				thing.price = thing.can_sell === -1 ? notForSaleText : bestThingPrice
+		})
+	})
+	return inventoryThings
 }
 
 async function API(methodName, userOption = {}) {
