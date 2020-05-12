@@ -41,7 +41,7 @@ const observer = new MutationObserver(records => {
 										priceDiv.firstChild.className = 'thing-price-no-price'
 
 									if (thingData.can_sell > 0)
-										priceDiv.firstChild.className += 'thing-price-banned'
+										priceDiv.firstChild.className += ' thing-price-banned'
 								})
 						}
 						else
