@@ -1,32 +1,32 @@
 /* Modified site styles by M1 Plus */
 
 .table-body-players-card-body-avatar {
-	height: 35px
+    height: 35px
 }
 
 .table-body-players-card-body-avatar>div {
-	width: 40px;
-	height: 40px;
-	padding: 2px;
+    width: 40px;
+    height: 40px;
+    padding: 2px;
 }
 
 body:not([mnpl-newcolors]) .table-body-players-card-body-avatar>div {
-	border: 2px solid transparent;
+    border: 2px solid transparent;
 }
 
 body[mnpl-newcolors] .table-body-players-card-body-avatar>div>div {
-	border: 2px solid #161a1b;
+    border: 2px solid #161a1b;
 }
 
 .table-body-players-card-body-timer {
-	top: 17.5px!important;
-	left: 22.5px!important;
-	width: 40px!important;
-	height: 40px!important;
+    top: 17.5px!important;
+    left: 22.5px!important;
+    width: 40px!important;
+    height: 40px!important;
 }
 
 .table-body-players-card-body-timer div {
-	width: 40px!important;
-	height: 40px!important;
-	font-size: 15px!important;
+    width: 40px!important;
+    height: 40px!important;
+    font-size: 15px!important;
 }

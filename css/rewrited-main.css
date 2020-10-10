@@ -3,14 +3,8 @@
 }
 
 .thing .thing-image {
-    width: 148px;
-    height: 109px;
-    padding: 13px 18px 14px;
+    width: 112px;
+    height: 90px;
+    padding: 0;
     border: none;
-}
-
-.thing.thing__souvenir .thing-image {
-    width: 146px;
-    height: 107px;
-    padding: 13px 17px 14px;
 }
