@@ -1,9 +1,7 @@
-const user_ids = [];
-
-console.log('worked')
-
 const observer = new MutationObserver(records => {
 	const re = /^player_card_(\d+)$/;
+
+	const user_ids = [];
 	records.forEach((arg) => {
 		if (arg.target.classList.contains('table-body-players')) {
 			let addedNode = arg.addedNodes[0]
@@ -46,6 +44,11 @@ const observer = new MutationObserver(records => {
 						let cardBodyStatsGamesDiv = document.createElement('div')
 						cardBodyStatsGamesDiv.className = 'table-body-players-card-body-stats-games'
 						cardBodyStatsDiv.appendChild(cardBodyStatsGamesDiv)
+
+						let cardBodyConditionDiv = document.createElement('div')
+						cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
+						cardBodyConditionDiv.appendChild(item.children[2])
+						item.insertBefore(cardBodyConditionDiv, item.lastChild)
 					}
 
 					data.data.forEach((user) => {
@@ -61,8 +64,23 @@ const observer = new MutationObserver(records => {
 	})
 })
 
-
 observer.observe(document.getElementsByTagName('body')[0], {
 	childList : true,
 	subtree: true
 })
+
+
+const results = window.location.href.match(/#\/(\d+)\/(\d+)/)
+const gs_id = results[1]
+const gs_game_id = results[2]
+const ws = new WebSocket(`wss://gs${gs_id}.monopoly-one.com/socket.io/?gs_game_id=${gs_game_id}&transport=websocket`)
+ws.onmessage = function(e) {
+	try {
+		const palyers = JSON.parse(e.data.match(/\[[\S\s]+\]/))[1].data.status.players
+		console.log(players)
+
+	}
+	catch(err) {
+		// Other messages
+	}
+}
