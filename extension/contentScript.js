@@ -6,20 +6,44 @@ observer.observe(document.getElementsByTagName('body')[0], {
 })
 
 
-const [gs_id, gs_game_id] = window.location.href.match(/#\/(\d+)\/(\d+)/).slice(1)
-const ws = new WebSocket(`wss://gs${gs_id}.monopoly-one.com/socket.io/?gs_game_id=${gs_game_id}&transport=websocket`)
-ws.onmessage = function(e) {
-    try {
-        const palyers = JSON.parse(e.data.match(/\[[\S\s]+\]/))[1].data.status.players
-    }
-    catch(err) {
-        // Other messages
+function createWebSocket() {
+    const [gs_id, gs_game_id] = window.location.href.match(/#\/(\d+)\/(\d+)/).slice(1)
+    const ws = new WebSocket(`wss://gs${gs_id}.monopoly-one.com/socket.io/?gs_game_id=${gs_game_id}&transport=websocket`)
+    ws.onmessage = function(e) {
+
+        function getRoundsPostfix(roundsLeft) {
+            return roundsLeft < 5 ? roundsLeft != 1 ? 'а' : '' : 'ов'
+        }
+
+        try {
+            const status = JSON.parse(e.data.match(/\[[\S\s]+\]/))[1].data.status
+            status.players.forEach(p => {
+                let playerCard = document.getElementById(`player_card_${p.user_id}`)
+                let creditDiv = playerCard.getElementsByClassName('table-body-players-card-body-credit')[0]
+                if (!p.can_use_credit) {
+                    creditDiv.remove()
+                }
+                else {
+                    if (p.credit_payRound) {
+                        let payRoundLeft = p.credit_payRound - status.round
+                        if (payRoundLeft > 0)
+                            creditDiv.innerHTML = `возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
+                        return
+                    }
+
+                    let takeRoundsLeft = p.credit_nextTakeRound - status.round
+                    creditDiv.innerHTML = takeRoundsLeft > 0 ? `доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}` : 'доступен'
+                }
+            })
+        }
+        catch(err) {
+            // Other messages
+        }
     }
 }
 
 
 function observerCallback(records) {
-
     function addStyleSheet(href) {
         let fileref = document.createElement('link')
         fileref.setAttribute('rel', 'stylesheet')
@@ -29,7 +53,7 @@ function observerCallback(records) {
     }
 
     function setUserStats(user) {
-        let playerCard = document.getElementById('player_card_' + user.user_id)
+        let playerCard = document.getElementById(`player_card_${user.user_id}`)
         if (user.hasOwnProperty('rank')) {
             playerCard.querySelector('.table-body-players-card-body-stats-rank').style.backgroundImage = `url("${user.rank.img}")`
         }
@@ -84,8 +108,17 @@ function observerCallback(records) {
                         cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
                         cardBodyConditionDiv.appendChild(item.children[2])
                         item.insertBefore(cardBodyConditionDiv, item.lastChild)
+
+                        // let cardBodyMoneyDiv = document.createElement('div')
+                        // cardBodyMoneyDiv.className = 'table-body-players-card-body-bankroll'
+                        // cardBodyConditionDiv.appendChild(cardBodyMoneyDiv)
+
+                        let cardBodyCreditDiv = document.createElement('div')
+                        cardBodyCreditDiv.className = 'table-body-players-card-body-credit'
+                        cardBodyConditionDiv.appendChild(cardBodyCreditDiv)
                     }
 
+                    createWebSocket()
                     data.data.forEach(setUserStats)
                 })
         }

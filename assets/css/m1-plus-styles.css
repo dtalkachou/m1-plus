@@ -36,4 +36,42 @@
 
 .table-body-players-card-body-condition {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.table-body-players-card-body-bankroll {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 14px;
+    width: 50%;
+}
+
+/*.table-body-players-card-body-money {
+    width: 50%;
+}*/
+
+.table-body-players-card-body-bankroll:before {
+    content: '$';
+    display: inline-block;
+    padding-right: 1px;
+    opacity: .5;
+    transform: scale(.75)
+}
+
+.table-body-players-card-body-bankroll:after {
+    content:'k';
+    padding-left: 2px;
+    opacity: .7
+}
+
+.table-body-players-card-body-credit {
+    flex-basis: 100%;
+    text-align: center;   
+    font-size: 9px;
+}
+
+/* add to gh-pages */
+.table-body-players-card-body-money {
+    font-size: 14px!important;
 }
