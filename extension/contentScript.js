@@ -52,7 +52,7 @@ function initCreditStatuses() {
             onPlayerCreditStatusChanged(Table.status.players[i])
         })
         vm.$watch(`status.players.${i}.status`, () => {
-            onPlayerStatusChanged()
+            onPlayerStatusChanged(Table.status.players[i])
         })
     }
     
