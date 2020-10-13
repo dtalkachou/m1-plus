@@ -18,11 +18,11 @@ function initCreditStatuses() {
 
         if (pl.credit_payRound) {
             let payRoundLeft = pl.credit_payRound - Table.status.round
-            creditDiv.innerHTML = `<b>возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}<b>`
+            creditDiv.innerHTML = `<b>возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}</b>`
         }
         else {
             let takeRoundsLeft = pl.credit_nextTakeRound - Table.status.round
-            creditDiv.innerHTML = takeRoundsLeft > 0 ? `<i>доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}<i>` : 'доступен'
+            creditDiv.innerHTML = takeRoundsLeft > 0 ? `<i>доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}</i>` : 'доступен'
         }  
     }
 
