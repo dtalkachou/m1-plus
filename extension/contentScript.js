@@ -1,3 +1,4 @@
+var mutation = false
 const observer = new MutationObserver(observerCallback)
 
 observer.observe(document.getElementsByTagName('body')[0], {
@@ -5,6 +6,45 @@ observer.observe(document.getElementsByTagName('body')[0], {
     subtree: true
 })
 
+
+function setUsersStats() {
+    for (let player of Table.status.players) {
+        let playersCardBody = document.querySelector(`#player_card_${player.user_id} .table-body-players-card-body`)
+
+        let cardBodyInfoDiv = document.createElement('div')
+        cardBodyInfoDiv.className = 'table-body-players-card-body-info'
+        cardBodyInfoDiv.appendChild(playersCardBody.firstChild)
+        playersCardBody.insertBefore(cardBodyInfoDiv, playersCardBody.firstChild)
+
+        let cardBodyStatsDiv = document.createElement('div')
+        cardBodyStatsDiv.className = 'table-body-players-card-body-stats'
+        cardBodyInfoDiv.appendChild(cardBodyStatsDiv)
+
+        let cardBodyStatsRankDiv = document.createElement('div')
+        cardBodyStatsRankDiv.className = 'table-body-players-card-body-stats-rank'
+        cardBodyStatsDiv.appendChild(cardBodyStatsRankDiv)
+
+        let cardBodyStatsGamesDiv = document.createElement('div')
+        cardBodyStatsGamesDiv.className = 'table-body-players-card-body-stats-games'
+        // let winRate = user.games_wins / user.games * 100 || 0;
+        // cardBodyStatsGamesDiv.innerHTML = `${user.games_wins} / ${user.games}<span>(${Math.round(winRate)}%)</span>`
+        cardBodyStatsDiv.appendChild(cardBodyStatsGamesDiv)
+
+        let cardBodyConditionDiv = document.createElement('div')
+        cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
+        cardBodyConditionDiv.appendChild(playersCardBody.children[2])
+        playersCardBody.insertBefore(cardBodyConditionDiv, playersCardBody.lastChild)
+
+        // let cardBodyMoneyDiv = document.createElement('div')
+        // cardBodyMoneyDiv.className = 'table-body-players-card-body-bankroll'
+        // cardBodyConditionDiv.appendChild(cardBodyMoneyDiv)
+
+        let cardBodyCreditDiv = document.createElement('div')
+        cardBodyCreditDiv.className = 'table-body-players-card-body-credit'
+        cardBodyCreditDiv.hidden = !player.can_use_credit || player.status
+        cardBodyConditionDiv.appendChild(cardBodyCreditDiv)
+    }
+}
 
 function initCreditStatuses() {
 
@@ -81,75 +121,24 @@ function observerCallback(records) {
         (document.body || document.head || document.documentElement).appendChild(script);
     }
 
-    function setUserStats(user) {
-        let playerCard = document.getElementById(`player_card_${user.user_id}`)
-        if (user.hasOwnProperty('rank')) {
-            playerCard.querySelector('.table-body-players-card-body-stats-rank').style.backgroundImage = `url("${user.rank.img}")`
-        }
-        let winRate = user.games_wins / user.games * 100 || 0;
-        playerCard.querySelector('.table-body-players-card-body-stats-games').innerHTML = `${user.games_wins} / ${user.games}<span>(${Math.round(winRate)}%)</span>`
-    }
-
     const re = /^player_card_(\d+)$/;
     const user_ids = [];
 
     records.forEach((arg) => {
-        if (arg.target.classList.contains('table-body-players')) {
-            // Collect user ids
-            let addedNode = arg.addedNodes[0]
-            let user_id = addedNode.id && re.test(addedNode.id) && addedNode.id.match(re)[1]
-            if (user_id) {
-                user_ids.push(user_id)
-            }
-        }
-        else if (arg.target.id && arg.target.id === 'styles-dyn-css' && user_ids.length) {
+        if (arg.target.id && arg.target.id === 'styles-dyn-css') {
             // Scripts on page have two mutation with #styles-dyn-css.
-            // First mutation before muttation with .table-body-players, second after
+            // First mutation before muttation with .table-body-players, second after.
+            if (!mutation) {
+                mutation = true;
+                return
+            }
+
             observer.disconnect();
 
-            fetch('https://monopoly-one.com/api/users.get?user_ids=' + user_ids.join(','))
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => { 
-                    addStyleSheet('https://dtalkachou.github.io/m1-plus/css/rewrited-table-new.css')
-
-                    let playersCardBodys = document.getElementsByClassName('table-body-players-card-body')
-                    for (let item of playersCardBodys) {
-                        let cardBodyInfoDiv = document.createElement('div')
-                        cardBodyInfoDiv.className = 'table-body-players-card-body-info'
-                        cardBodyInfoDiv.appendChild(item.firstChild)
-                        item.insertBefore(cardBodyInfoDiv, item.firstChild)
-
-                        let cardBodyStatsDiv = document.createElement('div')
-                        cardBodyStatsDiv.className = 'table-body-players-card-body-stats'
-                        cardBodyInfoDiv.appendChild(cardBodyStatsDiv)
-
-                        let cardBodyStatsRankDiv = document.createElement('div')
-                        cardBodyStatsRankDiv.className = 'table-body-players-card-body-stats-rank'
-                        cardBodyStatsDiv.appendChild(cardBodyStatsRankDiv)
-
-                        let cardBodyStatsGamesDiv = document.createElement('div')
-                        cardBodyStatsGamesDiv.className = 'table-body-players-card-body-stats-games'
-                        cardBodyStatsDiv.appendChild(cardBodyStatsGamesDiv)
-
-                        let cardBodyConditionDiv = document.createElement('div')
-                        cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
-                        cardBodyConditionDiv.appendChild(item.children[2])
-                        item.insertBefore(cardBodyConditionDiv, item.lastChild)
-
-                        // let cardBodyMoneyDiv = document.createElement('div')
-                        // cardBodyMoneyDiv.className = 'table-body-players-card-body-bankroll'
-                        // cardBodyConditionDiv.appendChild(cardBodyMoneyDiv)
-
-                        let cardBodyCreditDiv = document.createElement('div')
-                        cardBodyCreditDiv.className = 'table-body-players-card-body-credit'
-                        cardBodyConditionDiv.appendChild(cardBodyCreditDiv)
-                    }
-
-                    injetScript(initCreditStatuses)
-                    data.data.forEach(setUserStats)
-                })
+            addStyleSheet('https://dtalkachou.github.io/m1-plus/css/rewrited-table-new.css')
+            
+            injetScript(setUsersStats)
+            injetScript(initCreditStatuses)
         }
     })
 }
