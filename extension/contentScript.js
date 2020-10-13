@@ -6,50 +6,79 @@ observer.observe(document.getElementsByTagName('body')[0], {
 })
 
 
-function createWebSocket() {
-    const [gs_id, gs_game_id] = window.location.href.match(/#\/(\d+)\/(\d+)/).slice(1)
-    const ws = new WebSocket(`wss://gs${gs_id}.monopoly-one.com/socket.io/?gs_game_id=${gs_game_id}&transport=websocket`)
-    ws.onmessage = function(e) {
+function initCreditStatuses() {
+
+    function onPlayerCreditStatusChanged(pl) {
 
         function getRoundsPostfix(roundsLeft) {
             return roundsLeft < 5 ? roundsLeft != 1 ? 'а' : '' : 'ов'
         }
 
-        try {
-            const status = JSON.parse(e.data.match(/\[[\S\s]+\]/))[1].data.status
-            status.players.forEach(p => {
-                let playerCard = document.getElementById(`player_card_${p.user_id}`)
-                let creditDiv = playerCard.getElementsByClassName('table-body-players-card-body-credit')[0]
-                if (!p.can_use_credit) {
-                    creditDiv.remove()
-                }
-                else {
-                    if (p.credit_payRound) {
-                        let payRoundLeft = p.credit_payRound - status.round
-                        if (payRoundLeft > 0)
-                            creditDiv.innerHTML = `возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
-                        return
-                    }
+        let creditDiv = document.querySelector(`#player_card_${pl.user_id} .table-body-players-card-body-credit`)
 
-                    let takeRoundsLeft = p.credit_nextTakeRound - status.round
-                    creditDiv.innerHTML = takeRoundsLeft > 0 ? `доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}` : 'доступен'
-                }
-            })
+        if (pl.credit_payRound) {
+            let payRoundLeft = pl.credit_payRound - Table.status.round
+            creditDiv.innerHTML = `<b>возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}<b>`
         }
-        catch(err) {
-            // Other messages
+        else {
+            let takeRoundsLeft = pl.credit_nextTakeRound - Table.status.round
+            creditDiv.innerHTML = takeRoundsLeft > 0 ? `<i>доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}<i>` : 'доступен'
+        }  
+    }
+
+    function onRoundChanged() {
+        Table.status.players.forEach(pl => {
+            if (pl.can_use_credit || pl.status == 0) {
+                onPlayerCreditStatusChanged(pl)
+            }
+        })
+    }
+
+    function onPlayerStatusChanged(pl) {
+        if (pl.can_use_credit && pl.status == -1) {
+            let creditDiv = document.querySelector(`#player_card_${pl.user_id} .table-body-players-card-body-credit`)
+            creditDiv.remove()
         }
     }
+
+    const vm = new Vue({
+        computed: {
+            status: () => Table.status,
+        },
+    })
+    vm.$watch('status.round', onRoundChanged)
+    for (let i = 0; i < Table.status.players.length; i++) {
+        vm.$watch(`status.players.${i}.credit_toPay`, () => {
+            onPlayerCreditStatusChanged(Table.status.players[i])
+        })
+        vm.$watch(`status.players.${i}.status`, () => {
+            onPlayerStatusChanged()
+        })
+    }
+    
+    (function() {
+        Table.status.players.forEach(pl => {
+            if (pl.can_use_credit && pl.status == 0) {
+                onPlayerCreditStatusChanged(pl) 
+            }
+        })
+    })();
 }
 
-
 function observerCallback(records) {
+
     function addStyleSheet(href) {
         let fileref = document.createElement('link')
         fileref.setAttribute('rel', 'stylesheet')
         fileref.setAttribute('type', 'text/css')
         fileref.setAttribute('href', href)
         document.getElementsByTagName("head")[0].appendChild(fileref)
+    }
+
+    function injetScript(func) {
+        let script = document.createElement('script');
+        script.appendChild(document.createTextNode('(' + func + ')()'));
+        (document.body || document.head || document.documentElement).appendChild(script);
     }
 
     function setUserStats(user) {
@@ -118,7 +147,7 @@ function observerCallback(records) {
                         cardBodyConditionDiv.appendChild(cardBodyCreditDiv)
                     }
 
-                    createWebSocket()
+                    injetScript(initCreditStatuses)
                     data.data.forEach(setUserStats)
                 })
         }
