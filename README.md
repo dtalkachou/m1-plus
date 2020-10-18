@@ -1,2 +1,3 @@
-# m1-plus
-Browser extension for Monopoly One
+# Info
+
+This environment is required for the first beta versions of this extension.
