@@ -13,22 +13,23 @@ function setUsersStats() {
     for (let player of Table.status.players) {
         let playersCardBody = document.querySelector(`#player_card_${player.user_id} .table-body-players-card-body`)
 
+        let cardBodyInfoRowDiv = document.createElement('div')
+        cardBodyInfoRowDiv.className = 'table-body-players-card-body-info-row'
+        cardBodyInfoRowDiv.appendChild(playersCardBody.getElementsByClassName('table-body-players-card-body-avatar')[0])
+        cardBodyInfoRowDiv.appendChild(playersCardBody.getElementsByClassName('table-body-players-card-body-timer')[0])
+        playersCardBody.appendChild(cardBodyInfoRowDiv)
+
         let cardBodyInfoDiv = document.createElement('div')
         cardBodyInfoDiv.className = 'table-body-players-card-body-info'
-        Array.prototype.slice.call(playersCardBody.children, 1, 3).forEach(node => {
-            cardBodyInfoDiv.appendChild(node)
-        })
-        playersCardBody.appendChild(cardBodyInfoDiv)
+        cardBodyInfoDiv.appendChild(playersCardBody.getElementsByClassName('table-body-players-card-body-nick')[0])
+        cardBodyInfoDiv.appendChild(playersCardBody.getElementsByClassName('table-body-players-card-body-money')[0])
+        cardBodyInfoRowDiv.appendChild(cardBodyInfoDiv)
 
-        // let cardBodyConditionDiv = document.createElement('div')
-        // cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
-        // cardBodyConditionDiv.appendChild(playersCardBody.children[2])
-        // playersCardBody.insertBefore(cardBodyConditionDiv, playersCardBody.lastChild)
 
         let cardBodyCreditDiv = document.createElement('div')
         cardBodyCreditDiv.className = 'table-body-players-card-body-credit'
         cardBodyCreditDiv.hidden = !player.can_use_credit || player.status
-        cardBodyInfoDiv.appendChild(cardBodyCreditDiv)
+        playersCardBody.appendChild(cardBodyCreditDiv)
     }
 }
 
@@ -44,11 +45,11 @@ function initCreditStatuses() {
 
         if (pl.credit_payRound) {
             let payRoundLeft = pl.credit_payRound - Table.status.round
-            creditDiv.innerHTML = `возврат ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
+            creditDiv.innerHTML = `<div class="_pay"></div>${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
         }
         else {
             let takeRoundsLeft = pl.credit_nextTakeRound - Table.status.round
-            creditDiv.innerHTML = takeRoundsLeft > 0 ? `доступен ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}</i>` : 'доступен'
+            creditDiv.innerHTML = `<div class="_take"></div>${takeRoundsLeft > 0 ? `${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}` : 'доступен'}`
         }  
     }
 

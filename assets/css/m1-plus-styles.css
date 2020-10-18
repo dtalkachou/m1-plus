@@ -2,8 +2,8 @@
 
 [m1-plus] .table-body-players-card-body {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 [m1-plus] .table-body-players-card-body-avatar {
@@ -29,7 +29,7 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
 }
 
 [m1-plus] .table-body-players-card-body-timer {
-    top: 50px;
+    top: 49px;
     left: 10px;
     width: 40px;
     height: 40px;
@@ -39,6 +39,11 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
     width: 40px;
     height: 40px;
     font-size: 16px;
+}
+
+[m1-plus] .table-body-players-card-body-nick {
+    justify-content: flex-end;
+    width: 100%;
 }
 
 [m1-plus] .table-body-players-card-body-nick ._nick > div {
@@ -52,20 +57,51 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
     text-align: right;
 }
 
+[m1-plus] .table-body-players-card-body-money::before {
+    transform: scale(.9);
+}
+
 /* Custom M1 Plus styles */
 
+.table-body-players-card-body-info-row {
+    display: flex;
+    justify-content: space-between;
+}
+
 .table-body-players-card-body-info {
+    margin-left: 15px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    width: 100%;
     max-width: 75%;
 }
 
 .table-body-players-card-body-credit {
-    flex-basis: 100%;
-    text-align: right;   
-    font-size: 9px;
+    display: flex;
+    color: #fff;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: stretch;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 10px;
+}
+
+.table-body-players-card-body-credit ._pay, .table-body-players-card-body-credit ._take {
+    margin-right: 3px;
+    background: left/contain no-repeat;
+    width: 18px;
+    fill: #fff;
+}
+
+.table-body-players-card-body-credit ._pay {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4OCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTTEwLjM3NiA0Mi43NjJoMTF2M2gtMTF6bTEyLjc4IDBoMTF2M2gtMTF6Ii8+PHBhdGggZD0iTTY5LjM4Ljg4NWMtNy4xMTQgMC0xMy4yNiA0LjE3Ny0xNi4xNTUgMTAuMTk4SDkuNTdjLTUuMDQgMC05LjE0MiAzLjY3LTkuMTQyIDguMTh2MzJjMCA0LjUxIDQuMSA4LjE4IDkuMTQgOC4xOGg1Ni44NjRjNS4wNCAwIDkuMTQtMy42NyA5LjE0LTguMThWMzUuNjRjNi44NDctMi41MyAxMS43NS05LjEgMTEuNzUtMTYuODEzIDAtOS44OTMtOC4wNDgtMTcuOTQtMTcuOTQtMTcuOTR6TTMuNDMgMTkuMjYyYzAtMi44NTUgMi43NTQtNS4xOCA2LjE0LTUuMThINTIuMWMtLjQxNiAxLjUxNC0uNjU2IDMuMS0uNjU2IDQuNzQyIDAgMi40NS40OTYgNC43ODYgMS4zOSA2LjkxNUgzLjQzdi02LjQ4em02OS4xNDMgMzIuMDAyYzAgMi44NTUtMi43NTQgNS4xNzgtNi4xNCA1LjE3OEg5LjU2OGMtMy4zODcgMC02LjE0Mi0yLjMyMi02LjE0Mi01LjE3OFYyOC43NGg1MS4wMmMzLjIxNiA0LjgzIDguNzA2IDguMDIgMTQuOTMzIDguMDIgMS4wOSAwIDIuMTUyLS4xMTIgMy4xOS0uM3YxNC44MDR6TTY5LjM4IDMzLjc2MmMtOC4yMzUgMC0xNC45MzctNi43LTE0LjkzNy0xNC45MzhzNi43LTE0Ljk0IDE0LjkzOC0xNC45NGM4LjI0IDAgMTQuOTQgNi43MDMgMTQuOTQgMTQuOTQgMCA4LjIzNy02LjcgMTQuOTM4LTE0Ljk0IDE0LjkzOHoiLz48cGF0aCBkPSJNNjcuNTc3IDIxLjkzbC01LjQtNS40MDItMi4xMjIgMi4xMiA3LjUyMiA3LjUyM0w3OC43MSAxNS4wNGwtMi4xMjItMi4xMjIiLz48L3N2Zz4=)
+}
+
+.table-body-players-card-body-credit ._take {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4OCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTTEwLjUwMiA0Mi42MzdoMTF2M2gtMTF6bTEyLjc3OCAwaDExdjNoLTExeiIvPjxwYXRoIGQ9Ik02OS41MDguNzZjLTcuMTE3IDAtMTMuMjYgNC4xNzctMTYuMTU2IDEwLjE5OEg5LjY5NWMtNS4wNCAwLTkuMTQgMy42Ny05LjE0IDguMTh2MzJjMCA0LjUxIDQuMSA4LjE4IDkuMTQgOC4xOEg2Ni41NmM1LjAzOCAwIDkuMTQtMy42NyA5LjE0LTguMThWMzUuNTE0YzYuODQ2LTIuNTMgMTEuNzQ4LTkuMSAxMS43NDgtMTYuODEzIDAtOS44OS04LjA1LTE3Ljk0LTE3Ljk0LTE3Ljk0ek0zLjU1NSAxOS4xMzdjMC0yLjg1NSAyLjc1NS01LjE4IDYuMTQtNS4xOEg1Mi4yM2MtLjQxNiAxLjUxNC0uNjU2IDMuMS0uNjU2IDQuNzQyIDAgMi40NS40OTYgNC43OCAxLjM5IDYuOTFIMy41NTR2LTYuNDh6TTcyLjcgNTEuMTRjMCAyLjg1NC0yLjc1NiA1LjE3Ny02LjE0IDUuMTc3SDkuNjk0Yy0zLjM4NiAwLTYuMTQtMi4zMjItNi4xNC01LjE3OFYyOC42MUg1NC41N2MzLjIxNyA0LjgzIDguNzEgOC4wMjIgMTQuOTM2IDguMDIyIDEuMDkgMCAyLjE1Mi0uMTEzIDMuMTktLjN2MTQuODAzaC4wMDJ6bS0zLjE5Mi0xNy41MDNjLTguMjM2IDAtMTQuOTM4LTYuNy0xNC45MzgtMTQuOTM4IDAtOC4yNCA2LjctMTQuOTQgMTQuOTM4LTE0Ljk0IDguMjM3IDAgMTQuOTQgNi43IDE0Ljk0IDE0Ljk0IDAgOC4yMy02LjcwMyAxNC45My0xNC45NCAxNC45M3oiLz48cGF0aCBkPSJNNzEuMDA4IDEwLjU2N2gtM3Y2LjYzaC02LjYzM3YzaDYuNjMzdjYuNjMzaDN2LTYuNjMyaDYuNjN2LTNoLTYuNjMiLz48L3N2Zz4=)
 }
 
 /*.table-body-players-card-body-condition {
