@@ -1,40 +1,74 @@
-.table-body-players-card-body-info {
+/* Rewrited source monopoly-one styles */
+
+[m1-plus] .table-body-players-card-body {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 50px;
 }
 
-.table-body-players-card-body-stats {
+[m1-plus] .table-body-players-card-body-avatar {
+    height: 35px
+}
+
+[m1-plus] .table-body-players-card-body-avatar > div {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+}
+
+body:not([mnpl-newcolors]) [m1-plus] .table-body-players-card-body-avatar > div {
+    border: 2px solid transparent;
+}
+
+body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div {
+    border: 2px solid #161a1b;
+}
+
+[m1-plus] .table-body-players-card[mnpl-action_player] .table-body-players-card-body-avatar > div  div {
+    border-width: 0;
+}
+
+[m1-plus] .table-body-players-card-body-timer {
+    top: 50px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+[m1-plus] .table-body-players-card-body-timer div {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+}
+
+[m1-plus] .table-body-players-card-body-nick ._nick > div {
+    font-weight: 800;
+}
+
+[m1-plus] .table-body-players-card-body-money {
+    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Custom M1 Plus styles */
+
+.table-body-players-card-body-info {
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-end;
-    flex: 0 1 85px;
-    margin-top: 3px;
-    height: 35px;
+    max-width: 75%;
 }
 
-.table-body-players-card-body-stats-rank {
-    width: 45px;
-    height: 18px;
-    background-position: left;
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 2.5px;
+.table-body-players-card-body-credit {
+    flex-basis: 100%;
+    text-align: right;   
+    font-size: 9px;
 }
 
-.table-body-players-card-body-stats-games {
-    margin-top: 2px;
-    font-size: 10px;
-}
-
-.table-body-players-card-body-stats-games span {
-    padding-left: 3px;
-    opacity: .7;
-}
-
-.table-body-players-card-body-condition {
+/*.table-body-players-card-body-condition {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -46,10 +80,6 @@
     font-size: 14px;
     width: 50%;
 }
-
-/*.table-body-players-card-body-money {
-    width: 50%;
-}*/
 
 .table-body-players-card-body-bankroll:before {
     content: '$';
@@ -63,15 +93,4 @@
     content:'k';
     padding-left: 2px;
     opacity: .7
-}
-
-.table-body-players-card-body-credit {
-    flex-basis: 100%;
-    text-align: center;   
-    font-size: 9px;
-}
-
-/* add to gh-pages */
-.table-body-players-card-body-money {
-    font-size: 14px!important;
-}
+}*/

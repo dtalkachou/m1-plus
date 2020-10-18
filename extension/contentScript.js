@@ -8,41 +8,27 @@ observer.observe(document.getElementsByTagName('body')[0], {
 
 
 function setUsersStats() {
+    document.getElementsByClassName('table-body-players')[0].setAttribute('m1-plus', true)
+
     for (let player of Table.status.players) {
         let playersCardBody = document.querySelector(`#player_card_${player.user_id} .table-body-players-card-body`)
 
         let cardBodyInfoDiv = document.createElement('div')
         cardBodyInfoDiv.className = 'table-body-players-card-body-info'
-        cardBodyInfoDiv.appendChild(playersCardBody.firstChild)
-        playersCardBody.insertBefore(cardBodyInfoDiv, playersCardBody.firstChild)
+        Array.prototype.slice.call(playersCardBody.children, 1, 3).forEach(node => {
+            cardBodyInfoDiv.appendChild(node)
+        })
+        playersCardBody.appendChild(cardBodyInfoDiv)
 
-        let cardBodyStatsDiv = document.createElement('div')
-        cardBodyStatsDiv.className = 'table-body-players-card-body-stats'
-        cardBodyInfoDiv.appendChild(cardBodyStatsDiv)
-
-        let cardBodyStatsRankDiv = document.createElement('div')
-        cardBodyStatsRankDiv.className = 'table-body-players-card-body-stats-rank'
-        cardBodyStatsDiv.appendChild(cardBodyStatsRankDiv)
-
-        let cardBodyStatsGamesDiv = document.createElement('div')
-        cardBodyStatsGamesDiv.className = 'table-body-players-card-body-stats-games'
-        // let winRate = user.games_wins / user.games * 100 || 0;
-        // cardBodyStatsGamesDiv.innerHTML = `${user.games_wins} / ${user.games}<span>(${Math.round(winRate)}%)</span>`
-        cardBodyStatsDiv.appendChild(cardBodyStatsGamesDiv)
-
-        let cardBodyConditionDiv = document.createElement('div')
-        cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
-        cardBodyConditionDiv.appendChild(playersCardBody.children[2])
-        playersCardBody.insertBefore(cardBodyConditionDiv, playersCardBody.lastChild)
-
-        // let cardBodyMoneyDiv = document.createElement('div')
-        // cardBodyMoneyDiv.className = 'table-body-players-card-body-bankroll'
-        // cardBodyConditionDiv.appendChild(cardBodyMoneyDiv)
+        // let cardBodyConditionDiv = document.createElement('div')
+        // cardBodyConditionDiv.className = 'table-body-players-card-body-condition'
+        // cardBodyConditionDiv.appendChild(playersCardBody.children[2])
+        // playersCardBody.insertBefore(cardBodyConditionDiv, playersCardBody.lastChild)
 
         let cardBodyCreditDiv = document.createElement('div')
         cardBodyCreditDiv.className = 'table-body-players-card-body-credit'
         cardBodyCreditDiv.hidden = !player.can_use_credit || player.status
-        cardBodyConditionDiv.appendChild(cardBodyCreditDiv)
+        cardBodyInfoDiv.appendChild(cardBodyCreditDiv)
     }
 }
 
@@ -58,11 +44,11 @@ function initCreditStatuses() {
 
         if (pl.credit_payRound) {
             let payRoundLeft = pl.credit_payRound - Table.status.round
-            creditDiv.innerHTML = `<b>возврат через ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}</b>`
+            creditDiv.innerHTML = `возврат ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
         }
         else {
             let takeRoundsLeft = pl.credit_nextTakeRound - Table.status.round
-            creditDiv.innerHTML = takeRoundsLeft > 0 ? `<i>доступен через ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}</i>` : 'доступен'
+            creditDiv.innerHTML = takeRoundsLeft > 0 ? `доступен ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}</i>` : 'доступен'
         }  
     }
 
@@ -107,16 +93,9 @@ function initCreditStatuses() {
 
 function observerCallback(records) {
 
-    function addStyleSheet(href) {
-        let fileref = document.createElement('link')
-        fileref.setAttribute('rel', 'stylesheet')
-        fileref.setAttribute('type', 'text/css')
-        fileref.setAttribute('href', href)
-        document.getElementsByTagName("head")[0].appendChild(fileref)
-    }
-
     function injetScript(func) {
         let script = document.createElement('script');
+        script.innerHTML = '<!-- This code is injected by M1 Plus extension. -->\n'
         script.appendChild(document.createTextNode('(' + func + ')()'));
         (document.body || document.head || document.documentElement).appendChild(script);
     }
@@ -134,8 +113,6 @@ function observerCallback(records) {
             }
 
             observer.disconnect();
-
-            addStyleSheet('https://dtalkachou.github.io/m1-plus/css/rewrited-table-new.css')
             
             injetScript(setUsersStats)
             injetScript(initCreditStatuses)
