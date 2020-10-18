@@ -44,12 +44,24 @@ function initCreditStatuses() {
         let creditDiv = document.querySelector(`#player_card_${pl.user_id} .table-body-players-card-body-credit`)
 
         if (pl.credit_payRound) {
+            if (creditDiv.classList.contains('_take')) {
+                creditDiv.classList.remove('_take')
+            }
+            if (!creditDiv.classList.contains('_pay')) {
+                creditDiv.classList.add('_pay')
+            }
             let payRoundLeft = pl.credit_payRound - Table.status.round
-            creditDiv.innerHTML = `<div class="_pay"></div>${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
+            creditDiv.innerHTML = `возврат ${payRoundLeft} раунд${getRoundsPostfix(payRoundLeft)}`
         }
         else {
+            if (creditDiv.classList.contains('_pay')) {
+                creditDiv.classList.remove('_pay')
+            }
+            if (!creditDiv.classList.contains('_take')) {
+                creditDiv.classList.add('_take')
+            }
             let takeRoundsLeft = pl.credit_nextTakeRound - Table.status.round
-            creditDiv.innerHTML = `<div class="_take"></div>${takeRoundsLeft > 0 ? `${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}` : 'доступен'}`
+            creditDiv.innerHTML = takeRoundsLeft > 0 ? `доступен ${takeRoundsLeft} раунд${getRoundsPostfix(takeRoundsLeft)}` : 'доступен'
         }  
     }
 
@@ -63,7 +75,9 @@ function initCreditStatuses() {
 
     function onPlayerStatusChanged(pl) {
         if (pl.can_use_credit && pl.status == -1) {
-            let creditDiv = document.querySelector(`#player_card_${pl.user_id} .table-body-players-card-body-credit`)
+            let playerCard = document.querySelector(`#player_card_${pl.user_id}`)
+            let creditDiv = playerCard.querySelector(`.table-body-players-card-body-credit`)
+            playerCard.classList.add('no-credit')
             creditDiv.remove()
         }
     }
