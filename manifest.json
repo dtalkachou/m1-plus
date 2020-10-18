@@ -3,16 +3,8 @@
 	"version": "1.0",
 	"description": "Вспомогательное расширение для Monopoly One",
 	"permissions": [
-		"activeTab",
-		"declarativeContent",
-		"storage"
+		"activeTab"
 	],
-	"background": {
-		"scripts": [
-			"background.js"
-		],
-		"persistent": false
-	},
 	"content_scripts": [
 		{
 			"matches": [
@@ -20,18 +12,18 @@
 				"https://monopoly-one.com/m1tv/"
 			],
 			"js": [
-				"contentScript.js"
+				"extension/contentScript.js"
 			],
 			"css": [
-				"css/m1-plus-styles.css"
+				"assets/css/m1-plus-styles.css"
 			]
 		}
 	],
 	"icons": {
-		"16": "images/icon16.png",
-		"32": "images/icon32.png",
-		"48": "images/icon64.png",
-		"128": "images/icon128.png"
+		"16": "assets/img/icon16.png",
+		"32": "assets/img/icon32.png",
+		"48": "assets/img/icon64.png",
+		"128": "assets/img/icon128.png"
 	},
 	"manifest_version": 2
 }
