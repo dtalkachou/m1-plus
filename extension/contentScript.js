@@ -1,32 +1,66 @@
 var mutation = false
-const observer = new MutationObserver(observerCallback)
+const observer = new MutationObserver(records=> {
 
-observer.observe(document.getElementsByTagName('body')[0], {
-    childList : true,
-    subtree: true
+    function injetScript(func, execute=true) {
+        let script = document.createElement('script');
+        script.innerHTML = '<!-- This code is injected by M1 Plus extension. -->\n'
+        script.appendChild(document.createTextNode(execute ? '(' + func + ')()' : func));
+        (document.body || document.head || document.documentElement).appendChild(script);
+    }
+
+    records.forEach(arg => {
+        if (arg.target.id && arg.target.id === 'styles-dyn-css') {
+            // Scripts on page have two mutation with #styles-dyn-css.
+            // First mutation before muttation with .table-body-players, second after.
+            if (!mutation) {
+                mutation = true;
+                return
+            }
+
+            observer.disconnect();
+
+            injetScript(getBankrollPlayerCardValue, false)
+            injetScript(initPlayersStats)
+            initBankroll()
+            injetScript(initCreditStatuses)
+        }
+    })
 })
 
+function getBankrollPlayerCardValue(bankrollValue) {
+    bankrollValue = parseInt(bankrollValue.replace(/,|\./, '')) / 1000
+    if (bankrollValue < 10) {
+        return bankrollValue.toLocaleString(undefined, {
+            maximumFractionDigits: 1
+        })
+    }
+    return parseInt(bankrollValue)
+}
+
+function initBankroll() {
+    let contentPlayers = document.querySelector('.TableHelper-content-players')
+    const observer = new MutationObserver(records => {
+        records.forEach(arg => {
+            let playerRow = arg.target.parentNode.closest('.TableHelper-content-players-row')
+            if (playerRow && arg.target.parentNode.classList.contains('_bankroll')) {
+                playerRow.querySelector('._dot').classList.forEach(cl => {
+                    if (cl.match(/_index_[0-4]/)) {
+                        let cardBodyBankrollDiv = document.querySelector(`[mnpl-order="${cl.charAt(7)}"] .table-body-players-card-body-bankroll`)
+                        cardBodyBankrollDiv.innerHTML = getBankrollPlayerCardValue(arg.target.data)
+                        return
+                    }
+                })
+            }
+        })
+    })
+
+    observer.observe(contentPlayers, {
+        subtree: true,
+        characterData: true
+    })
+}
 
 function initPlayersStats() {
-
-    function getBankrollValue(bankrollValue) {
-        bankrollValue /= 1000
-        if (bankrollValue < 10) {
-            return bankrollValue.toLocaleString(undefined, {
-                maximumFractionDigits: 1
-            })
-        }
-        return Math.round(bankrollValue)
-    }
-
-    function getPlayerBankroll(playerCard) {
-        const selector = '.TableHelper-content-players-row'
-
-        let mnplOrder = playerCard.getAttribute('mnpl-order')
-        let bankrollValue = document.querySelector(`${selector} ._index_${mnplOrder}`).closest(selector).children[1].textContent
-        return getBankrollValue(parseInt(bankrollValue.replace(/,|\./, '')))
-    }
-
     document.getElementsByClassName('table-body-players')[0].setAttribute('m1-plus', true)
 
     for (let player of Table.status.players) {
@@ -43,7 +77,11 @@ function initPlayersStats() {
         cardBodyConditionRowDiv.className = 'table-body-players-card-body-condition-row'
         let cardBodyBankrollDiv = document.createElement('div')
         cardBodyBankrollDiv.className = 'table-body-players-card-body-bankroll'
-        cardBodyBankrollDiv.innerHTML = getPlayerBankroll(playerCard)
+        let mnplOrder = playerCard.getAttribute('mnpl-order')
+        const selector = '.TableHelper-content-players-row'
+        let bankrollDiv = document.querySelector(`${selector} ._index_${mnplOrder}`).closest(selector).children[1]
+        bankrollDiv.className = '_bankroll'
+        cardBodyBankrollDiv.innerHTML =  getBankrollPlayerCardValue(bankrollDiv.textContent)
         if (player.status) {  
             cardBodyBankrollDiv.remove()
         }
@@ -145,45 +183,7 @@ function initCreditStatuses() {
     })();
 }
 
-function initBancroll() {
-    let contentPlayers = document.querySelector('.TableHelper-content-players')
-    const observer = new MutationObserver(observerCallback)
-
-    observer.observe(contentPlayers, {
-        childList : true,
-        subtree: true
-    })
-
-    function observerCallback(records) {
-        records.forEach(arg => {
-            console.log(arg)
-        })
-    }
-
-}
-
-function observerCallback(records) {
-
-    function injetScript(func) {
-        let script = document.createElement('script');
-        script.innerHTML = '<!-- This code is injected by M1 Plus extension. -->\n'
-        script.appendChild(document.createTextNode('(' + func + ')()'));
-        (document.body || document.head || document.documentElement).appendChild(script);
-    }
-
-    records.forEach(arg => {
-        if (arg.target.id && arg.target.id === 'styles-dyn-css') {
-            // Scripts on page have two mutation with #styles-dyn-css.
-            // First mutation before muttation with .table-body-players, second after.
-            if (!mutation) {
-                mutation = true;
-                return
-            }
-
-            observer.disconnect();
-            
-            injetScript(initPlayersStats)
-            injetScript(initCreditStatuses)
-        }
-    })
-}
+observer.observe(document.getElementsByTagName('body')[0], {
+    childList : true,
+    subtree: true
+})
