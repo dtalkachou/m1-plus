@@ -75,7 +75,7 @@ function initCreditStatuses() {
     function onPlayerCreditStatusChanged(pl) {
 
         function getRoundsPostfix(roundsLeft) {
-            return roundsLeft < 5 ? roundsLeft != 1 ? 'а' : '' : 'ов'
+            return roundsLeft < 5 && roundsLeft ? roundsLeft != 1 ? 'а' : '' : 'ов'
         }
 
         let creditDiv = document.querySelector(`#player_card_${pl.user_id} .table-body-players-card-body-credit`)
