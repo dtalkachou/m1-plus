@@ -66,12 +66,12 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
     text-align: right;
 }
 
-[mnpl-leaved="1"] .table-body-players-card-body-money {
-    align-self: center;
+[m1-plus] .table-body-players-card-body-money::before {
+    padding-right: 0;
 }
 
-[m1-plus] .table-body-players-card-body-money::before {
-    transform: scale(.9);
+[m1-plus] .table-body-players-card-body-money::after {
+    padding-left: 0;
 }
 
 /* Custom M1 Plus styles */
@@ -82,13 +82,17 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
 }
 
 .table-body-players-card-body-info {
-    margin-left: 15px;
+    margin-left: 5px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
     max-width: 75%;
+}
+
+[mnpl-leaved="1"] .table-body-players-card-body-info {
+    justify-content: center;
 }
 
 .table-body-players-card-body-credit {
@@ -118,29 +122,33 @@ body[mnpl-newcolors] [m1-plus] .table-body-players-card-body-avatar > div > div 
     background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4OCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTTEwLjUwMiA0Mi42MzdoMTF2M2gtMTF6bTEyLjc3OCAwaDExdjNoLTExeiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02OS41MDguNzZjLTcuMTE3IDAtMTMuMjYgNC4xNzctMTYuMTU2IDEwLjE5OEg5LjY5NWMtNS4wNCAwLTkuMTQgMy42Ny05LjE0IDguMTh2MzJjMCA0LjUxIDQuMSA4LjE4IDkuMTQgOC4xOEg2Ni41NmM1LjAzOCAwIDkuMTQtMy42NyA5LjE0LTguMThWMzUuNTE0YzYuODQ2LTIuNTMgMTEuNzQ4LTkuMSAxMS43NDgtMTYuODEzIDAtOS44OS04LjA1LTE3Ljk0LTE3Ljk0LTE3Ljk0ek0zLjU1NSAxOS4xMzdjMC0yLjg1NSAyLjc1NS01LjE4IDYuMTQtNS4xOEg1Mi4yM2MtLjQxNiAxLjUxNC0uNjU2IDMuMS0uNjU2IDQuNzQyIDAgMi40NS40OTYgNC43OCAxLjM5IDYuOTFIMy41NTR2LTYuNDh6TTcyLjcgNTEuMTRjMCAyLjg1NC0yLjc1NiA1LjE3Ny02LjE0IDUuMTc3SDkuNjk0Yy0zLjM4NiAwLTYuMTQtMi4zMjItNi4xNC01LjE3OFYyOC42MUg1NC41N2MzLjIxNyA0LjgzIDguNzEgOC4wMjIgMTQuOTM2IDguMDIyIDEuMDkgMCAyLjE1Mi0uMTEzIDMuMTktLjN2MTQuODAzaC4wMDJ6bS0zLjE5Mi0xNy41MDNjLTguMjM2IDAtMTQuOTM4LTYuNy0xNC45MzgtMTQuOTM4IDAtOC4yNCA2LjctMTQuOTQgMTQuOTM4LTE0Ljk0IDguMjM3IDAgMTQuOTQgNi43IDE0Ljk0IDE0Ljk0IDAgOC4yMy02LjcwMyAxNC45My0xNC45NCAxNC45M3oiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNNzEuMDA4IDEwLjU2N2gtM3Y2LjYzaC02LjYzM3YzaDYuNjMzdjYuNjMzaDN2LTYuNjMyaDYuNjN2LTNoLTYuNjMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=);
 }
 
-/*.table-body-players-card-body-condition {
+.table-body-players-card-body-condition-row {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+[mnpl-leaved="1"] .table-body-players-card-body-condition-row {
     justify-content: center;
-    flex-wrap: wrap;
 }
 
 .table-body-players-card-body-bankroll {
-    margin-top: 5px;
-    text-align: center;
-    font-size: 14px;
-    width: 50%;
+    margin-top: 0;
+    font-size: 10px;
+    font-weight: 600;
+    margin-right: 2px;
 }
 
-.table-body-players-card-body-bankroll:before {
+.table-body-players-card-body-bankroll::before {
     content: '$';
-    display: inline-block;
-    padding-right: 1px;
     opacity: .5;
-    transform: scale(.75)
+    transform: scale(.9);
 }
 
-.table-body-players-card-body-bankroll:after {
-    content:'k';
-    padding-left: 2px;
-    opacity: .7
-}*/
+
+.table-body-players-card-body-bankroll::after {
+    content: 'k';
+    opacity: .7;
+
+}
