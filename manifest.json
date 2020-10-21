@@ -1,6 +1,6 @@
 {
 	"name": "M1 Plus",
-	"version": "1.0",
+	"version": "1.0.4",
 	"description": "Вспомогательное расширение для Monopoly One",
 	"permissions": [
 		"activeTab"
